@@ -1,0 +1,10 @@
+{
+  "name": "sm3tool-global",
+  "version": "1.0.0",
+  "description": "SM3 CLI (global copy)",
+  "main": "SM3.js",
+  "bin": { "sm3": "SM3.js" },
+  "keywords": ["sm3","hash","cli"],
+  "license": "MIT",
+  "dependencies": {}
+}

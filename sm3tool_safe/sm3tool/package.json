@@ -1,0 +1,13 @@
+{
+  "name": "sm3tool",
+  "version": "1.0.0",
+  "description": "Simple SM3 hashing CLI",
+  "main": "SM3.js",
+  "bin": {
+    "sm3": "SM3.js"
+  },
+  "keywords": ["sm3","hash","cli"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
