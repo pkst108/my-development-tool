@@ -11,9 +11,9 @@ if (-not (Get-Command gpg -ErrorAction SilentlyContinue)) {
 # 创建所需目录
 New-Item -Path $homedir -ItemType Directory -Force | Out-Null
 
-# 生成4096位GPG密钥（密码 5Pz5QMNsQSjWduMbUrSEeDrLP3pytMUSHZ9YvvZDthh7ttVvRjuquFS5dPigEQvFHznht5SjFThDPVyYLiLpV9otnJpzKxMuUAff）
+# 生成4096位GPG密钥（密码 yoursecret）
 # 在生成前检测密钥是否已存在，避免重复生成
-$keyId = 'case20190120@outlook.com'
+$keyId = 'join@outlook.com'
 $listOut = & gpg --homedir $homedir --with-colons --list-keys $keyId 2>$null
 if ($listOut -and ($listOut -match '^pub')) {
 	Write-Host "检测到已存在的密钥：$keyId，正在删除以重新生成（选 B）。"
@@ -31,17 +31,17 @@ Key-Usage: sign,cert
 Subkey-Type: RSA
 Subkey-Length: 4096
 Subkey-Usage: encrypt
-Name-Real: 王贵平
-Name-Email: case20190120@outlook.com
+Name-Real: join
+Name-Email: join@outlook.com
 Expire-Date: 0
-Passphrase: 5Pz5QMNsQSjWduMbUrSEeDrLP3pytMUSHZ9YvvZDthh7ttVvRjuquFS5dPigEQvFHznht5SjFThDPVyYLiLpV9otnJpzKxMuUAff
+Passphrase: yoursecret
 %commit
 '@
 
 # 写入参数文件（ASCII）并生成密钥
 $batch | Out-File -FilePath $paramFile -Encoding ascii
 Write-Host "使用 batch 参数文件生成密钥：$paramFile"
-& gpg --homedir $homedir --batch --pinentry-mode loopback --passphrase "5Pz5QMNsQSjWduMbUrSEeDrLP3pytMUSHZ9YvvZDthh7ttVvRjuquFS5dPigEQvFHznht5SjFThDPVyYLiLpV9otnJpzKxMuUAff" --generate-key $paramFile
+& gpg --homedir $homedir --batch --pinentry-mode loopback --passphrase "yoursecret" --generate-key $paramFile
 $genExit = $LASTEXITCODE
 Remove-Item $paramFile -ErrorAction SilentlyContinue
 if ($genExit -ne 0) {
@@ -62,7 +62,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # 导出私钥（非交互式导出需要 --batch 和 loopback）
  $privPath = Join-Path $base 'gpg_private.asc'
-& gpg --homedir $homedir --batch --pinentry-mode loopback --yes --passphrase "5Pz5QMNsQSjWduMbUrSEeDrLP3pytMUSHZ9YvvZDthh7ttVvRjuquFS5dPigEQvFHznht5SjFThDPVyYLiLpV9otnJpzKxMuUAff" --armor --output $privPath --export-secret-keys $keyId
+& gpg --homedir $homedir --batch --pinentry-mode loopback --yes --passphrase "yoursecret" --armor --output $privPath --export-secret-keys $keyId
 if ($LASTEXITCODE -ne 0) {
 	Write-Host "私钥导出失败（exit $LASTEXITCODE）。请检查 gpg 输出。"
 } else {
